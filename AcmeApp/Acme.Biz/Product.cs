@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Acme.Common;
+using static Acme.Common.LoggingService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +13,13 @@ namespace Acme.Biz
     /// </summary>
     public class Product
     {
+        #region Constructors
         public Product()
         {
             Console.WriteLine("Product instance created.");
+            ////initializing the vendor object in the default ctor
+            ////so when product is constructed so is vendor
+            //this.ProductVendor = new Vendor();
         }
 
         //using ctor to initialize product properties
@@ -29,7 +35,9 @@ namespace Acme.Biz
             this.Description = description;
             Console.WriteLine($"Product instance has a name: {ProductName}");
         }
+        #endregion
 
+        #region Properties
         //this is a parameter
         private string productName;
         //this is a property (method)
@@ -53,8 +61,42 @@ namespace Acme.Biz
             set { productId = value; }
         }
 
+        
+        //The class defines a data type
+        private Vendor productVendor;
+        public Vendor ProductVendor
+        {
+            get
+            {
+                //when any code requests the productVendor
+                //check if productVendor object variable is null & initialize
+                if (productVendor == null)
+                {
+                    //note we work with the backing field not ProductVendor prop
+                    //so when ProductVendor is requested the backing field is checked
+                    productVendor = new Vendor();
+                }
+                return productVendor;
+            }
+            set { productVendor = value; }
+        }
+
+        #endregion
+
         public string SayHello()
         {
+            //var vendor = new Vendor();
+            //vendor.SendWelcomeEmail("Message from Product");
+
+            var emailService = new EmailService();
+            var confirmation = emailService.SendMessage("New Product", 
+                this.ProductName,
+                "sales@asd.com");
+
+            //static classes can not be instantiated (only use for method access)
+            //when "using static Acme. ..." one can use static class methods directly
+            var result = LoggingService.LogAction(confirmation);
+
             return $"Hello {ProductName} ({ProductId}): {Description}";
         }
     }

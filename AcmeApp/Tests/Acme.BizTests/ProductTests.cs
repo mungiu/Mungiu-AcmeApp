@@ -12,8 +12,7 @@ namespace Acme.Biz.Tests
     public class ProductTests
     {
         /// <summary>
-        /// Testing by invoking default ctor and manually setting values 
-        /// for each property.
+        /// Testing by invoking default ctor with setting properties technique
         /// </summary>
         [TestMethod()]
         public void SayHelloTest()
@@ -23,14 +22,15 @@ namespace Acme.Biz.Tests
             currentProduct.ProductName = "Saw";
             currentProduct.ProductId = 1;
             currentProduct.Description = "15-inch steel blade hand saw";
+            currentProduct.ProductVendor.CompanyName = "Bilka";
             //calling the expected results
             var expected = "Hello Saw (1): 15-inch steel blade hand saw";
 
-            //Act - executing the actual method
-            var actual = currentProduct.SayHello();
+            ////Act - executing the actual method
+            //var actual = currentProduct.SayHello();
 
             //Assert
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected, currentProduct.SayHello());
         }
 
         /// <summary>
@@ -46,11 +46,47 @@ namespace Acme.Biz.Tests
             //calling the expected results
             var expected = "Hello USB (2): USB 3.0 stick 8GB";
 
-            //Act - executing the actual method
-            var actual = currentProduct.SayHello();
+            ////Act - executing the actual method
+            //var actual = currentProduct.SayHello();
 
             //Assert
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected, currentProduct.SayHello());
+        }
+
+        ///<summary>
+        ///Testing by uzing object initializer syntax
+        ///</summary>
+        [TestMethod()]
+        public void SayHello_ObjectInitializer()
+        {
+            //Arrange - test setup
+            var currentProduct = new Product
+            {
+                ProductId = 3,
+                ProductName = "Bitcoin",
+                Description = "Crypto currency"
+            };
+
+            var expected = "Hello Bitcoin (3): Crypto currency";
+
+            ////Act - executing the method
+            //var actual = currentProduct.SayHello();
+
+            //Assert
+            Assert.AreEqual(expected, currentProduct.SayHello());
+        }
+
+        [TestMethod()]
+        public void Product_Null()
+        {
+            //Arrange - test setup
+            Product currentProduct = null;
+            var companyName = currentProduct?.ProductVendor?.CompanyName;
+
+            string expected = null;
+
+            //Assert
+            Assert.AreEqual(expected, companyName);
         }
     }
 }
