@@ -1,5 +1,4 @@
 ﻿using Acme.Common;
-using static Acme.Common.LoggingService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +12,16 @@ namespace Acme.Biz
     /// </summary>
     public class Product
     {
+        public const double InchesPerMeter = 39.37;
+        public readonly decimal MinimumPrice;
+
         #region Constructors
         public Product()
         {
             Console.WriteLine("Product instance created.");
             ////initializing the vendor object in the default ctor
-            ////so when product is constructed so is vendor
             //this.ProductVendor = new Vendor();
+            this.MinimumPrice = .96m;
         }
 
         //using ctor to initialize product properties
@@ -33,11 +35,22 @@ namespace Acme.Biz
             this.ProductName = productName;
             this.ProductId = productId;
             this.Description = description;
+            if (ProductName.StartsWith("Bulk"))
+                this.MinimumPrice = 9.99m;
+
             Console.WriteLine($"Product instance has a name: {ProductName}");
         }
         #endregion
 
         #region Properties
+        //"?" makes it a nullable type
+        private DateTime? availabilityDate;
+        public DateTime? AvailabilityDate
+        {
+            get { return availabilityDate; }
+            set { availabilityDate = value; }
+        }
+
         //this is a parameter
         private string productName;
         //this is a property (method)
@@ -94,10 +107,10 @@ namespace Acme.Biz
                 "sales@asd.com");
 
             //static classes can not be instantiated (only use for method access)
-            //when "using static Acme. ..." one can use static class methods directly
             var result = LoggingService.LogAction(confirmation);
 
-            return $"Hello {ProductName} ({ProductId}): {Description}";
+            return $"Hello {ProductName} ({ProductId}): {Description}" +
+                $" Available on: {AvailabilityDate?.ToShortDateString()}";
         }
     }
 }

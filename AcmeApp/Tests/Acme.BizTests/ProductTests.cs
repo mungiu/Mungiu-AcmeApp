@@ -11,9 +11,6 @@ namespace Acme.Biz.Tests
     [TestClass()]
     public class ProductTests
     {
-        /// <summary>
-        /// Testing by invoking default ctor with setting properties technique
-        /// </summary>
         [TestMethod()]
         public void SayHelloTest()
         {
@@ -24,7 +21,8 @@ namespace Acme.Biz.Tests
             currentProduct.Description = "15-inch steel blade hand saw";
             currentProduct.ProductVendor.CompanyName = "Bilka";
             //calling the expected results
-            var expected = "Hello Saw (1): 15-inch steel blade hand saw";
+            var expected = "Hello Saw (1): 15-inch steel blade hand saw" +
+                " Available on: ";
 
             ////Act - executing the actual method
             //var actual = currentProduct.SayHello();
@@ -33,9 +31,6 @@ namespace Acme.Biz.Tests
             Assert.AreEqual(expected, currentProduct.SayHello());
         }
 
-        /// <summary>
-        /// Testing by initializing the prop. values with parametarized ctor
-        /// </summary>
         [TestMethod()]
         public void SayHello_ParameterizedCtor()
         {
@@ -44,7 +39,8 @@ namespace Acme.Biz.Tests
             var currentProduct = new Product("USB", 2, "USB 3.0 stick 8GB");
 
             //calling the expected results
-            var expected = "Hello USB (2): USB 3.0 stick 8GB";
+            var expected = "Hello USB (2): USB 3.0 stick 8GB" +
+                " Available on: ";
 
             ////Act - executing the actual method
             //var actual = currentProduct.SayHello();
@@ -53,9 +49,6 @@ namespace Acme.Biz.Tests
             Assert.AreEqual(expected, currentProduct.SayHello());
         }
 
-        ///<summary>
-        ///Testing by uzing object initializer syntax
-        ///</summary>
         [TestMethod()]
         public void SayHello_ObjectInitializer()
         {
@@ -67,7 +60,8 @@ namespace Acme.Biz.Tests
                 Description = "Crypto currency"
             };
 
-            var expected = "Hello Bitcoin (3): Crypto currency";
+            var expected = "Hello Bitcoin (3): Crypto currency" +
+                " Available on: ";
 
             ////Act - executing the method
             //var actual = currentProduct.SayHello();
@@ -87,6 +81,36 @@ namespace Acme.Biz.Tests
 
             //Assert
             Assert.AreEqual(expected, companyName);
+        }
+
+        [TestMethod()]
+        public void ConvertMetersToInchesTest()
+        {
+            //Arrange - test setup (expected inches in 2 meters)
+            var expected = 78.74;
+            //Assert - asserting formula correctness
+            Assert.AreEqual(expected, 2 * Product.InchesPerMeter);
+        }
+
+        [TestMethod()]
+        public void MinimumPriceTest_Default()
+        {
+            //Arrange (creating instance of class as it is not static)
+            var currentProduct = new Product();
+            var expected = .96m;
+            //Assert
+            Assert.AreEqual(expected, currentProduct.MinimumPrice);
+        }
+
+        [TestMethod()]
+        public void MinimumPriceTest_Bulk()
+        {
+            //Arrange - initializing non static instance
+            //NOTE: To instantiate an object succesfully all params must be met
+            var currentProduct = new Product("Bulk Test", 3, "Test bulk descr.");
+            var expected = 9.99m;
+            //Assert
+            Assert.AreEqual(expected, currentProduct.MinimumPrice);
         }
     }
 }
