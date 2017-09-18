@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Acme.Biz.Tests
 {
+    //Tests are always void as they never return, only assert.
     [TestClass()]
     public class ProductTests
     {
@@ -16,12 +17,12 @@ namespace Acme.Biz.Tests
         {
             //Arrange - test setup
             var currentProduct = new Product();
-            currentProduct.ProductName = "Saw";
+            currentProduct.ProductName = "Saw Product";
             currentProduct.ProductId = 1;
             currentProduct.Description = "15-inch steel blade hand saw";
             currentProduct.ProductVendor.CompanyName = "Bilka";
             //calling the expected results
-            var expected = "Hello Saw (1): 15-inch steel blade hand saw" +
+            var expected = "Hello Saw Product (1): 15-inch steel blade hand saw" +
                 " Available on: ";
 
             ////Act - executing the actual method
@@ -36,10 +37,10 @@ namespace Acme.Biz.Tests
         {
             //Arrange - test setup
             //we nolonger need to set the values manually as in above test
-            var currentProduct = new Product("USB", 2, "USB 3.0 stick 8GB");
+            var currentProduct = new Product("USB Product", 2, "USB 3.0 stick 8GB");
 
             //calling the expected results
-            var expected = "Hello USB (2): USB 3.0 stick 8GB" +
+            var expected = "Hello USB Product (2): USB 3.0 stick 8GB" +
                 " Available on: ";
 
             ////Act - executing the actual method
@@ -111,6 +112,28 @@ namespace Acme.Biz.Tests
             var expected = 9.99m;
             //Assert
             Assert.AreEqual(expected, currentProduct.MinimumPrice);
+        }
+
+        [TestMethod()]
+        public void ProductNameFormating()
+        {
+            //Arrange - test setup
+            var currentProduct = new Product(" Product ", 5, "Test product!");
+            var expected = "Product";
+
+            //Assert
+            Assert.AreEqual(expected, currentProduct?.ProductName?.Trim());
+        }
+
+        [TestMethod()]
+        public void asdTest()
+        {
+            //Arrange
+            var currentProduct = new Product("Asdf", 6, "test");
+            var expected = "Name must be > 4 & < 20";
+
+            //Assert
+            Assert.AreEqual(expected, currentProduct?.ValidationMessage);
         }
     }
 }

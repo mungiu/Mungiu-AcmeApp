@@ -56,8 +56,17 @@ namespace Acme.Biz
         //this is a property (method)
         public string ProductName
         {
-            get { return productName; }
-            set { productName = value; }
+            get
+            {
+                var formatedValue = productName?.Trim();
+                return formatedValue;
+            }
+            set
+            {
+                if (value.Length > 4 && value.Length < 20)
+                    productName = value;
+                else ValidationMessage = "Name must be > 4 & < 20";
+            }
         }
 
         private string description;
@@ -75,24 +84,22 @@ namespace Acme.Biz
         }
 
         
-        //The class defines a data type
         private Vendor productVendor;
         public Vendor ProductVendor
         {
             get
             {
-                //when any code requests the productVendor
                 //check if productVendor object variable is null & initialize
                 if (productVendor == null)
-                {
-                    //note we work with the backing field not ProductVendor prop
-                    //so when ProductVendor is requested the backing field is checked
                     productVendor = new Vendor();
-                }
+
                 return productVendor;
             }
+
             set { productVendor = value; }
         }
+
+        public string ValidationMessage { get; private set; }
 
         #endregion
 
