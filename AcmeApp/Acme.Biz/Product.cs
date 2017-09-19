@@ -22,6 +22,8 @@ namespace Acme.Biz
             ////initializing the vendor object in the default ctor
             //this.ProductVendor = new Vendor();
             this.MinimumPrice = .96m;
+            //initializing prop value in ctor
+            this.Category = "Tools";
         }
 
         //using ctor to initialize product properties
@@ -82,14 +84,13 @@ namespace Acme.Biz
             get { return productId; }
             set { productId = value; }
         }
-
         
         private Vendor productVendor;
         public Vendor ProductVendor
         {
             get
             {
-                //check if productVendor object variable is null & initialize
+                //Lazy Loading - creating an instance only when requested
                 if (productVendor == null)
                     productVendor = new Vendor();
 
@@ -99,8 +100,11 @@ namespace Acme.Biz
             set { productVendor = value; }
         }
 
+        //auto implemented property (backing field implicitly existent)
         public string ValidationMessage { get; private set; }
-
+        public string Category { get; set; }
+        //initializing prop value (can be done in the ctor)
+        public int SequenceNumber { get; set; } = 1;
         #endregion
 
         public string SayHello()

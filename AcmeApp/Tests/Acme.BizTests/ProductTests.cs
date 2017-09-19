@@ -126,14 +126,94 @@ namespace Acme.Biz.Tests
         }
 
         [TestMethod()]
-        public void asdTest()
+        public void ProductName_TooLong()
         {
             //Arrange
-            var currentProduct = new Product("Asdf", 6, "test");
-            var expected = "Name must be > 4 & < 20";
+            //when initializing using product properties instance will not be created
+            //if one of the properties does not pass validation
+            var currentProduct = new Product();
+            currentProduct.ProductName = "Asdfajdh akshdkahsdkahg ahksgdjakdaksj";
 
+            //since "var" type can not be used for "null";
+            string expectedProductName = null;
+            string expectedValidationMessage= "Name must be > 4 & < 20";
+
+            //Assert 1
+            Assert.AreEqual(expectedProductName, currentProduct?.ProductName);
+            Assert.AreEqual(expectedValidationMessage, currentProduct?.ValidationMessage);
+        }
+
+        [TestMethod()]
+        public void ProductName_TooShort()
+        {
+            //Arrange
+            var currentProduct = new Product();
+            currentProduct.ProductName = "Asdf";
+
+            string expectedProductName = null;
+            string expectedValidationMessage = "Name must be > 4 & < 20";
+
+            //Assert 1
+            Assert.AreEqual(expectedProductName, currentProduct?.ProductName);
+            Assert.AreEqual(expectedValidationMessage, currentProduct?.ValidationMessage);
+        }
+
+        [TestMethod()]
+        public void ProductName_JustRight()
+        {
+            //Arrange
+            var currentProduct = new Product();
+            currentProduct.ProductName = "Asdfedfr";
+
+            string expectedProductName = "Asdfedfr";
+            string expectedValidationMessage = null;
+
+            //Assert 1
+            Assert.AreEqual(expectedProductName, currentProduct?.ProductName);
+            Assert.AreEqual(expectedValidationMessage, currentProduct?.ValidationMessage);
+        }
+
+        [TestMethod]
+        public void Category_DefaultValue()
+        {
+            //Arrange
+            var currentProduct = new Product();
+            var expectedCategory = "Tools";
             //Assert
-            Assert.AreEqual(expected, currentProduct?.ValidationMessage);
+            Assert.AreEqual(expectedCategory, currentProduct.Category);
+        }
+
+        [TestMethod]
+        public void Category_NewValue()
+        {
+            //Arrange
+            var currentProduct = new Product();
+            currentProduct.Category = "New Category Test";
+            var expectedCategory = "New Category Test";
+            //Assert
+            Assert.AreEqual(expectedCategory, currentProduct.Category);
+        }
+
+        [TestMethod]
+        public void Sequence_DefaultValue()
+        {
+            //Arrange
+            var currentProduct = new Product();
+            //note expected int # != expected string #
+            var expectedSequence = 1;
+            //Assert
+            Assert.AreEqual(expectedSequence, currentProduct.SequenceNumber);
+        }
+
+        [TestMethod]
+        public void Sequence_NewValue()
+        {
+            //Arrange
+            var currentProduct = new Product();
+            currentProduct.SequenceNumber = 2;
+            var expectedSequence = 2;
+            //Assert
+            Assert.AreEqual(expectedSequence, currentProduct.SequenceNumber);
         }
     }
 }
