@@ -11,36 +11,32 @@ namespace Acme.Biz.Tests
     [TestClass()]
     public class VendorTests
     {
-        //Test valid company name
         [TestMethod()]
         public void SendWelcomeEmail_ValidCompany_Success()
         {
-            // Arrange - test setup
-            var vendor = new Vendor();
-            vendor.CompanyName = "ABC Corp";
+            // Arrange
+            var vendor = new Vendor
+            {
+                CompanyName = "ABC Corp"
+            };
             var expected = "Message sent: Hello ABC Corp";
 
-            // Act - calling tested method
-            var actual = vendor.SendWelcomeEmail("Test Message");
-
-            // Assert - checking for assertion
-            Assert.AreEqual(expected, actual);
+            // Assert
+            Assert.AreEqual(expected, vendor.SendWelcomeEmail("Test Message"));
         }
 
-        //Test empty company name
         [TestMethod()]
         public void SendWelcomeEmail_EmptyCompany_Success()
         {
             // Arrange
-            var vendor = new Vendor();
-            vendor.CompanyName = "";
+            var vendor = new Vendor
+            {
+                CompanyName = ""
+            };
             var expected = "Message sent: Hello";
 
-            // Act
-            var actual = vendor.SendWelcomeEmail("Test Message");
-
             // Assert
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected, vendor.SendWelcomeEmail("Test Message"));
         }
 
         //Test null company name
@@ -48,15 +44,27 @@ namespace Acme.Biz.Tests
         public void SendWelcomeEmail_NullCompany_Success()
         {
             // Arrange
-            var vendor = new Vendor();
-            vendor.CompanyName = null;
+            var vendor = new Vendor
+            {
+                CompanyName = null
+            };
             var expected = "Message sent: Hello";
-
-            // Act
-            var actual = vendor.SendWelcomeEmail("Test Message");
-
+            
             // Assert
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected, vendor.SendWelcomeEmail("Test Message"));
+        }
+
+        [TestMethod()]
+        public void PlaceOrderTest()
+        {
+            //Arrange
+            var currentVendor = new Vendor();
+            var currentProduct = new Product("Test name", 1, "Test description");
+
+            var expected = true;
+
+            //Assert
+            Assert.AreEqual(expected, currentVendor.PlaceOrder(currentProduct, 3));
         }
     }
 }

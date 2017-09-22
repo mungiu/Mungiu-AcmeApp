@@ -100,7 +100,6 @@ namespace Acme.Biz
         internal string Category { get; set; }
         public int SequenceNumber { get; set; } = 1;
         public string ProductCode => this.Category + "_" + SequenceNumber;
-
         //auto implemented property (backing field implicitly existent)
         public string ValidationMessage { get; private set; }
         #endregion

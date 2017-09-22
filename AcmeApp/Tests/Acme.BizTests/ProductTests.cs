@@ -16,17 +16,16 @@ namespace Acme.Biz.Tests
         public void SayHelloTest()
         {
             //Arrange - test setup
-            var currentProduct = new Product();
-            currentProduct.ProductName = "Saw Product";
-            currentProduct.ProductId = 1;
-            currentProduct.Description = "15-inch steel blade hand saw";
+            var currentProduct = new Product
+            {
+                ProductName = "Saw Product",
+                ProductId = 1,
+                Description = "15-inch steel blade hand saw"
+            };
+
             currentProduct.ProductVendor.CompanyName = "Bilka";
-            //calling the expected results
             var expected = "Hello Saw Product (1): 15-inch steel blade hand saw" +
                 " Available on: ";
-
-            ////Act - executing the actual method
-            //var actual = currentProduct.SayHello();
 
             //Assert
             Assert.AreEqual(expected, currentProduct.SayHello());
@@ -38,13 +37,8 @@ namespace Acme.Biz.Tests
             //Arrange - test setup
             //we nolonger need to set the values manually as in above test
             var currentProduct = new Product("USB Product", 2, "USB 3.0 stick 8GB");
-
-            //calling the expected results
             var expected = "Hello USB Product (2): USB 3.0 stick 8GB" +
                 " Available on: ";
-
-            ////Act - executing the actual method
-            //var actual = currentProduct.SayHello();
 
             //Assert
             Assert.AreEqual(expected, currentProduct.SayHello());
@@ -162,8 +156,10 @@ namespace Acme.Biz.Tests
         public void ProductName_JustRight()
         {
             //Arrange
-            var currentProduct = new Product();
-            currentProduct.ProductName = "Asdfedfr";
+            var currentProduct = new Product
+            {
+                ProductName = "Asdfedfr"
+            };
 
             string expectedProductName = "Asdfedfr";
             string expectedValidationMessage = null;
@@ -217,7 +213,7 @@ namespace Acme.Biz.Tests
         }
 
         [TestMethod]
-        public void Product_CategoryAndSequenceNumber_Concatination()
+        public void ProductCode_Concatination()
         {
             //Arrange
             var currentProduct = new Product();

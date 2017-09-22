@@ -17,6 +17,33 @@ namespace Acme.Biz
         public string Email { get; set; }
 
         /// <summary>
+        /// Sends product order to the vendor.
+        /// </summary>
+        /// <param name="product">Product being ordered</param>
+        /// <param name="quantity">Quantity being ordered</param>
+        /// <returns></returns>
+        public bool PlaceOrder(Product product, int quantity)
+        {
+            if (product == null)
+                throw new ArgumentNullException(nameof(product));
+            if (quantity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity));
+
+            var success = false;
+            var orderText = "Order from Acme, Inc: \r\n" +
+                            $"Product: {product.ProductCode}\r\n" +
+                            $"Quantity: {quantity}";
+
+            var emailService = new EmailService();
+            var confirmation = emailService.SendMessage("Order Confirmation", 
+                orderText, this.Email);
+
+            if (confirmation.StartsWith("Message sent: "))
+                success = true;
+
+            return success;
+        }
+        /// <summary>
         /// Sends an email to welcome a new vendor.
         /// </summary>
         /// <returns></returns>
