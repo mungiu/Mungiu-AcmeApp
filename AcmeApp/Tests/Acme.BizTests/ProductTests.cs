@@ -215,5 +215,18 @@ namespace Acme.Biz.Tests
             //Assert
             Assert.AreEqual(expectedSequence, currentProduct.SequenceNumber);
         }
+
+        [TestMethod]
+        public void Product_CategoryAndSequenceNumber_Concatination()
+        {
+            //Arrange
+            var currentProduct = new Product();
+            currentProduct.Category = "This";
+            currentProduct.SequenceNumber = 1;
+            var expectedProductCode = "This_1";
+
+            //Assert
+            Assert.AreEqual(expectedProductCode, currentProduct.ProductCode);
+        }
     }
 }

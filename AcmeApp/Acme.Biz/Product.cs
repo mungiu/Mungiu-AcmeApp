@@ -26,14 +26,12 @@ namespace Acme.Biz
             this.Category = "Tools";
         }
 
-        //using ctor to initialize product properties
+        //ctor initializing properties
         public Product(string productName, 
             int productId,
             string description) : this() 
-            //setting values passed in ctor to properties
-            //prop. PascalCased, param. camelCased
+            //setting passed values to properties
         {
-            //"this" clarifies that we refer to the property of the current object
             this.ProductName = productName;
             this.ProductId = productId;
             this.Description = description;
@@ -45,7 +43,7 @@ namespace Acme.Biz
         #endregion
 
         #region Properties
-        //"?" makes it a nullable type
+        //"?" = nullable type
         private DateTime? availabilityDate;
         public DateTime? AvailabilityDate
         {
@@ -53,9 +51,9 @@ namespace Acme.Biz
             set { availabilityDate = value; }
         }
 
-        //this is a parameter
+        //parameter
         private string productName;
-        //this is a property (method)
+        //property (NOT METHOD)
         public string ProductName
         {
             get
@@ -90,21 +88,21 @@ namespace Acme.Biz
         {
             get
             {
-                //Lazy Loading - creating an instance only when requested
+                //Lazy Loading - creating instance only when requested
                 if (productVendor == null)
                     productVendor = new Vendor();
 
                 return productVendor;
             }
-
             set { productVendor = value; }
         }
 
+        internal string Category { get; set; }
+        public int SequenceNumber { get; set; } = 1;
+        public string ProductCode => this.Category + "_" + SequenceNumber;
+
         //auto implemented property (backing field implicitly existent)
         public string ValidationMessage { get; private set; }
-        public string Category { get; set; }
-        //initializing prop value (can be done in the ctor)
-        public int SequenceNumber { get; set; } = 1;
         #endregion
 
         public string SayHello()
