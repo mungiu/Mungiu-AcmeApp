@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Acme.Common;
 
 namespace Acme.Biz.Tests
 {
@@ -39,7 +40,6 @@ namespace Acme.Biz.Tests
             Assert.AreEqual(expected, vendor.SendWelcomeEmail("Test Message"));
         }
 
-        //Test null company name
         [TestMethod()]
         public void SendWelcomeEmail_NullCompany_Success()
         {
@@ -58,13 +58,35 @@ namespace Acme.Biz.Tests
         public void PlaceOrderTest()
         {
             //Arrange
-            var currentVendor = new Vendor();
-            var currentProduct = new Product("Test name", 1, "Test description");
+            var vendor = new Vendor();
+            var product = new Product("Test name", 1, "Test description");
 
-            var expected = true;
+            //Act
+            var expected = new OperationResult(true, 
+                            $"Order from Acme, Inc: \r\n" +
+                            $"Product: Tools_1\r\n" +
+                            $"Quantity: 1");
+            var actual = vendor.PlaceOrder(product, 1);
 
-            //Assert
-            Assert.AreEqual(expected, currentVendor.PlaceOrder(currentProduct, 3));
+            //Asserting the first "bool" param and second "string" param
+            Assert.AreEqual(expected.Success, actual.Success);
+            Assert.AreEqual(expected.Message, actual.Message);
+
+        }
+
+        //test exception handling
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void PlaceOrder_NullProduct_Exception()
+        {
+            //Arrange
+            var vendor = new Vendor();
+
+            //Act - mimiking null param inputs
+            var actual = vendor.PlaceOrder(null, 12);
+
+            //Assert done using the above:
+            //[ExpectedException(typeof(ArgumentNullException))]
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Acme.Biz
         /// <param name="product">Product being ordered</param>
         /// <param name="quantity">Quantity being ordered</param>
         /// <returns></returns>
-        public bool PlaceOrder(Product product, int quantity)
+        public OperationResult PlaceOrder(Product product, int quantity)
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
@@ -37,11 +37,12 @@ namespace Acme.Biz
             var emailService = new EmailService();
             var confirmation = emailService.SendMessage("Order Confirmation", 
                 orderText, this.Email);
-
             if (confirmation.StartsWith("Message sent: "))
                 success = true;
 
-            return success;
+            //instantiating the class to enable 
+            var operationResult = new OperationResult(success, orderText);
+            return operationResult;
         }
         /// <summary>
         /// Sends an email to welcome a new vendor.

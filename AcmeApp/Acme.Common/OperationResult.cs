@@ -6,10 +6,12 @@
     /// </summary>
     public class OperationResult
     {
+        //default ctor
         public OperationResult()
         {
         }
 
+        //param ctor
         public OperationResult(bool success, string message) : this()
         {
             this.Success = success;

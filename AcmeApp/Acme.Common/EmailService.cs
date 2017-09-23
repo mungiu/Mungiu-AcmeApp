@@ -20,6 +20,8 @@ namespace Acme.Common
         /// <returns></returns>
         public string SendMessage(string subject, string message, string recipient)
         {
+            //Missing implementation of send email 
+
             var confirmation = "Message sent: " + subject;
             LoggingService.LogAction(confirmation);
             return confirmation;
