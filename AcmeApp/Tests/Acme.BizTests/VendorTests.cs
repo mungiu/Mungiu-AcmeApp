@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Acme.Common;
+using static Acme.Biz.Vendor;
 
 namespace Acme.Biz.Tests
 {
@@ -49,7 +50,7 @@ namespace Acme.Biz.Tests
                 CompanyName = null
             };
             var expected = "Message sent: Hello";
-            
+
             // Assert
             Assert.AreEqual(expected, vendor.SendWelcomeEmail("Test Message"));
         }
@@ -60,10 +61,10 @@ namespace Acme.Biz.Tests
             //Arrange
             var vendor = new Vendor();
             var product = new Product("Test name", 1, "Test description");
-            var expected = new OperationResult(true, 
-                            $"Order from Acme, Inc \r\n" +
-                            $"Product: Tools_1\r\n" +
-                            $"Quantity: 1");
+            var expected = new OperationResult(true,
+                            $"Order from Acme, Inc" +
+                            $"\r\nProduct: Tools_1" +
+                            $"\r\nQuantity: 1");
 
             //Act
             var actual = vendor.PlaceOrder(product, 1);
@@ -80,10 +81,10 @@ namespace Acme.Biz.Tests
             var vendor = new Vendor();
             var product = new Product("Test name", 1, "Test description");
             var expected = new OperationResult(true,
-                            $"Order from Acme, Inc\r\n" +
-                            $"Product: Tools_1\r\n" +
-                            $"Quantity: 1\r\n" +
-                            $"Deliver by: 10/25/2017");
+                            $"Order from Acme, Inc" +
+                            $"\r\nProduct: Tools_1" +
+                            $"\r\nQuantity: 1" +
+                            $"\r\nDeliver by: 10/25/2017");
 
             //Act
             var actual = vendor.PlaceOrder(product, 1,
@@ -108,6 +109,26 @@ namespace Acme.Biz.Tests
 
             //Assert done using the above:
             //[ExpectedException(typeof(ArgumentNullException))]
+        }
+
+        [TestMethod()]
+        public void PlaceOrderTest_WithAddress()
+        {
+            //Arrange
+            var vendor = new Vendor();
+            var product = new Product();
+
+            var expected = new OperationResult(true,
+                "Test With address");
+
+            //Act
+            var actual = vendor.PlaceOrder(product, 1, 
+                                           IncludeAddress.yes, 
+                                           SendCopy.no);
+
+            //Assert - NOTE: We assert for every parameter
+            Assert.AreEqual(expected.Success, actual.Success);
+            Assert.AreEqual(expected.Message, actual.Message);
         }
     }
 }

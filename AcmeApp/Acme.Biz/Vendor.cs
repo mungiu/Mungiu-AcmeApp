@@ -12,9 +12,12 @@ namespace Acme.Biz
     /// </summary>
     public class Vendor 
     {
-        public int VendorId { get; set; }
+        public enum IncludeAddress { yes, no};
+        public enum SendCopy { yes, no };
+
         public string CompanyName { get; set; }
         public string Email { get; set; }
+        public int VendorId { get; set; }
 
         /// <summary>
         /// Sends product order to the vendor.
@@ -24,7 +27,8 @@ namespace Acme.Biz
         /// <returns></returns>
         public OperationResult PlaceOrder(Product product, int quantity)
         {
-            return PlaceOrder(product, quantity);
+            //NOTE: If nulls are removed, will throw AtackOverflowException
+            return PlaceOrder(product, quantity, null, null);
         }
 
         /// <summary>
@@ -35,9 +39,10 @@ namespace Acme.Biz
         /// <param name="deliverBy">Requested delivery date.</param>
         /// <returns></returns>
         public OperationResult PlaceOrder(Product product, int quantity, 
-            DateTimeOffset? deliverBy)
+                                          DateTimeOffset? deliverBy)
         {
-            return PlaceOrder(product, quantity, DateTimeOffset.Now);
+            //NOTE: If nulls are removed, will throw AtackOverflowException
+            return PlaceOrder(product, quantity, deliverBy, null);
         }
 
         /// <summary>
@@ -49,7 +54,8 @@ namespace Acme.Biz
         /// <param name="instructions">Delivery instructions.</param>
         /// <returns></returns>
         public OperationResult PlaceOrder(Product product, int quantity,
-            DateTimeOffset? deliverBy, string instructions)
+                                          DateTimeOffset? deliverBy, 
+                                          string instructions)
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
@@ -59,13 +65,13 @@ namespace Acme.Biz
                 throw new ArgumentOutOfRangeException(nameof(deliverBy));
 
             var success = false;
-            var orderText = "Order from Acme, Inc\r\n" +
-                            $"Product: {product.ProductCode}\r\n" +
-                            $"Quantity: {quantity}\r\n";
+            var orderText = "Order from Acme, Inc" +
+                            $"\r\nProduct: {product.ProductCode}" +
+                            $"\r\nQuantity: {quantity}";
             if (deliverBy.HasValue)
-                orderText += $"Deliver by: {deliverBy.Value.ToString("d")}\r\n";
+                orderText += $"\r\nDeliver by: {deliverBy.Value.ToString("d")}";
             if (instructions != null)
-                orderText += $"Delivery instructions: {instructions}";
+                orderText += $"\r\nDelivery instructions: {instructions}";
 
             var emailService = new EmailService();
             var confirmation = emailService.SendMessage("Order Confirmation",
@@ -73,8 +79,27 @@ namespace Acme.Biz
             if (confirmation.StartsWith("Message sent: "))
                 success = true;
 
-            //instantiating the class to enable 
             var operationResult = new OperationResult(success, orderText);
+            return operationResult;
+        }
+
+        /// <summary>
+        /// Sends product order to the vendor.
+        /// </summary>
+        /// <param name="product">Ordered product.</param>
+        /// <param name="quantity">Ordered quantity.</param>
+        /// <param name="address">"True" to include shipping address.</param>
+        /// <param name="copy">"True" to send email copy.</param>
+        /// <returns>Success flag and order text.</returns>
+        public OperationResult PlaceOrder(Product product, int quantity,
+                                          IncludeAddress theAddress, 
+                                          SendCopy theCopy)
+        {
+            var orderText = "Test";
+            if (theAddress == IncludeAddress.yes) orderText += " With address";
+            if (theCopy == SendCopy.yes) orderText += " With copy";
+
+            var operationResult = new OperationResult(true, orderText);
             return operationResult;
         }
 
