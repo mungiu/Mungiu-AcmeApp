@@ -24,25 +24,7 @@ namespace Acme.Biz
         /// <returns></returns>
         public OperationResult PlaceOrder(Product product, int quantity)
         {
-            if (product == null)
-                throw new ArgumentNullException(nameof(product));
-            if (quantity <= 0)
-                throw new ArgumentOutOfRangeException(nameof(quantity));
-
-            var success = false;
-            var orderText = "Order from Acme, Inc \r\n" +
-                            $"Product: {product.ProductCode}\r\n" +
-                            $"Quantity: {quantity}";
-
-            var emailService = new EmailService();
-            var confirmation = emailService.SendMessage("Order Confirmation", 
-                orderText, this.Email);
-            if (confirmation.StartsWith("Message sent: "))
-                success = true;
-
-            //instantiating the class to enable 
-            var operationResult = new OperationResult(success, orderText);
-            return operationResult;
+            return PlaceOrder(product, quantity);
         }
 
         /// <summary>
@@ -55,29 +37,7 @@ namespace Acme.Biz
         public OperationResult PlaceOrder(Product product, int quantity, 
             DateTimeOffset? deliverBy)
         {
-            if (product == null)
-                throw new ArgumentNullException(nameof(product));
-            if (quantity <= 0)
-                throw new ArgumentOutOfRangeException(nameof(quantity));
-            if (deliverBy <= DateTimeOffset.Now)
-                throw new ArgumentOutOfRangeException(nameof(deliverBy));
-
-            var success = false;
-            var orderText = "Order from Acme, Inc\r\n" +
-                            $"Product: {product.ProductCode}\r\n" +
-                            $"Quantity: {quantity}\r\n";
-            if (deliverBy.HasValue)
-                orderText += $"Deliver by: {deliverBy.Value.ToString("d")}";
-
-            var emailService = new EmailService();
-            var confirmation = emailService.SendMessage("Order Confirmation",
-                orderText, this.Email);
-            if (confirmation.StartsWith("Message sent: "))
-                success = true;
-
-            //instantiating the class to enable 
-            var operationResult = new OperationResult(success, orderText);
-            return operationResult;
+            return PlaceOrder(product, quantity, DateTimeOffset.Now);
         }
 
         /// <summary>

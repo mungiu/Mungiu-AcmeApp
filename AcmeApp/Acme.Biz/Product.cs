@@ -51,6 +51,8 @@ namespace Acme.Biz
             set { availabilityDate = value; }
         }
 
+        public decimal Cost { get; set; }
+
         //parameter
         private string productName;
         //property (NOT METHOD)
@@ -104,6 +106,15 @@ namespace Acme.Biz
         public string ValidationMessage { get; private set; }
         #endregion
 
+        /// <summary>
+        /// Calculates suggested retail price.
+        /// </summary>
+        /// <param name="markupPercent">Percent used to mark up the cost.</param>
+        /// <returns></returns>
+        //NOTE: We used LAMDA operator => to shorted the method
+        public decimal CalculateSuggestedPrice(decimal markupPercent) =>
+            this.Cost + (this.Cost * markupPercent / 100);
+
         public string SayHello()
         {
             //var vendor = new Vendor();
@@ -120,5 +131,11 @@ namespace Acme.Biz
             return $"Hello {ProductName} ({ProductId}): {Description}" +
                 $" Available on: {AvailabilityDate?.ToShortDateString()}";
         }
+
+        //overriding ToString so it returns proper info on Product var when debuging
+        //by default ToString() will return the "namespace + this.Class"
+        //NOTE: => LAMDA operator used for method shortening
+        public override string ToString() => 
+            $"{this.ProductName} ({this.productId})";
     }
 }

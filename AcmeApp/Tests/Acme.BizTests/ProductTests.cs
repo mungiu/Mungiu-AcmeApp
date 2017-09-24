@@ -130,7 +130,7 @@ namespace Acme.Biz.Tests
 
             //since "var" type can not be used for "null";
             string expectedProductName = null;
-            string expectedValidationMessage= "Name must be > 4 & < 20";
+            string expectedValidationMessage = "Name must be > 4 & < 20";
 
             //Assert 1
             Assert.AreEqual(expectedProductName, currentProduct?.ProductName);
@@ -223,6 +223,20 @@ namespace Acme.Biz.Tests
 
             //Assert
             Assert.AreEqual(expectedProductCode, currentProduct.ProductCode);
+        }
+
+        [TestMethod()]
+        public void CalculateSuggestedPriceTest()
+        {
+            //Arrange
+            var product = new Product
+            {
+                Cost = 100
+            };
+            var expected = 120;
+
+            //Assert
+            Assert.AreEqual(expected, product.CalculateSuggestedPrice(20));
         }
     }
 }
