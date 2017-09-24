@@ -19,8 +19,8 @@ namespace Acme.Biz
         /// <summary>
         /// Sends product order to the vendor.
         /// </summary>
-        /// <param name="product">Product being ordered</param>
-        /// <param name="quantity">Quantity being ordered</param>
+        /// <param name="product">Ordered product</param>
+        /// <param name="quantity">Ordered quantity</param>
         /// <returns></returns>
         public OperationResult PlaceOrder(Product product, int quantity)
         {
@@ -30,7 +30,7 @@ namespace Acme.Biz
                 throw new ArgumentOutOfRangeException(nameof(quantity));
 
             var success = false;
-            var orderText = "Order from Acme, Inc: \r\n" +
+            var orderText = "Order from Acme, Inc \r\n" +
                             $"Product: {product.ProductCode}\r\n" +
                             $"Quantity: {quantity}";
 
@@ -44,6 +44,80 @@ namespace Acme.Biz
             var operationResult = new OperationResult(success, orderText);
             return operationResult;
         }
+
+        /// <summary>
+        /// Sends product order to the vendor.
+        /// </summary>
+        /// <param name="product">Ordered product.</param>
+        /// <param name="quantity">Ordered quantity.</param>
+        /// <param name="deliverBy">Requested delivery date.</param>
+        /// <returns></returns>
+        public OperationResult PlaceOrder(Product product, int quantity, 
+            DateTimeOffset? deliverBy)
+        {
+            if (product == null)
+                throw new ArgumentNullException(nameof(product));
+            if (quantity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity));
+            if (deliverBy <= DateTimeOffset.Now)
+                throw new ArgumentOutOfRangeException(nameof(deliverBy));
+
+            var success = false;
+            var orderText = "Order from Acme, Inc\r\n" +
+                            $"Product: {product.ProductCode}\r\n" +
+                            $"Quantity: {quantity}\r\n";
+            if (deliverBy.HasValue)
+                orderText += $"Deliver by: {deliverBy.Value.ToString("d")}";
+
+            var emailService = new EmailService();
+            var confirmation = emailService.SendMessage("Order Confirmation",
+                orderText, this.Email);
+            if (confirmation.StartsWith("Message sent: "))
+                success = true;
+
+            //instantiating the class to enable 
+            var operationResult = new OperationResult(success, orderText);
+            return operationResult;
+        }
+
+        /// <summary>
+        /// Sends product order to the vendor.
+        /// </summary>
+        /// <param name="product">Ordered product.</param>
+        /// <param name="quantity">Ordered quantity.</param>
+        /// <param name="deliverBy">Requested delivery date.</param>
+        /// <param name="instructions">Delivery instructions.</param>
+        /// <returns></returns>
+        public OperationResult PlaceOrder(Product product, int quantity,
+            DateTimeOffset? deliverBy, string instructions)
+        {
+            if (product == null)
+                throw new ArgumentNullException(nameof(product));
+            if (quantity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity));
+            if (deliverBy <= DateTimeOffset.Now)
+                throw new ArgumentOutOfRangeException(nameof(deliverBy));
+
+            var success = false;
+            var orderText = "Order from Acme, Inc\r\n" +
+                            $"Product: {product.ProductCode}\r\n" +
+                            $"Quantity: {quantity}\r\n";
+            if (deliverBy.HasValue)
+                orderText += $"Deliver by: {deliverBy.Value.ToString("d")}\r\n";
+            if (instructions != null)
+                orderText += $"Delivery instructions: {instructions}";
+
+            var emailService = new EmailService();
+            var confirmation = emailService.SendMessage("Order Confirmation",
+                orderText, this.Email);
+            if (confirmation.StartsWith("Message sent: "))
+                success = true;
+
+            //instantiating the class to enable 
+            var operationResult = new OperationResult(success, orderText);
+            return operationResult;
+        }
+
         /// <summary>
         /// Sends an email to welcome a new vendor.
         /// </summary>

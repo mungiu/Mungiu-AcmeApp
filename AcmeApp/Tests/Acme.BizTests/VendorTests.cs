@@ -60,18 +60,39 @@ namespace Acme.Biz.Tests
             //Arrange
             var vendor = new Vendor();
             var product = new Product("Test name", 1, "Test description");
-
-            //Act
             var expected = new OperationResult(true, 
-                            $"Order from Acme, Inc: \r\n" +
+                            $"Order from Acme, Inc \r\n" +
                             $"Product: Tools_1\r\n" +
                             $"Quantity: 1");
+
+            //Act
             var actual = vendor.PlaceOrder(product, 1);
 
             //Asserting the first "bool" param and second "string" param
             Assert.AreEqual(expected.Success, actual.Success);
             Assert.AreEqual(expected.Message, actual.Message);
+        }
 
+        [TestMethod]
+        public void PlaceOrderTest_3Parameters()
+        {
+            //Arrange
+            var vendor = new Vendor();
+            var product = new Product("Test name", 1, "Test description");
+            var expected = new OperationResult(true,
+                            $"Order from Acme, Inc\r\n" +
+                            $"Product: Tools_1\r\n" +
+                            $"Quantity: 1\r\n" +
+                            $"Deliver by: 10/25/2017");
+
+            //Act
+            var actual = vendor.PlaceOrder(product, 1,
+                        new DateTimeOffset(2017, 10, 25, 0, 0, 0,
+                        new TimeSpan(-7, 0, 0)));
+
+            //Assert
+            Assert.AreEqual(expected.Success, actual.Success);
+            Assert.AreEqual(expected.Message, actual.Message);
         }
 
         //test exception handling

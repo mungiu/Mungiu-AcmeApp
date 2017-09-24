@@ -22,8 +22,8 @@ namespace Acme.Biz.Tests
                 ProductId = 1,
                 Description = "15-inch steel blade hand saw"
             };
-
             currentProduct.ProductVendor.CompanyName = "Bilka";
+
             var expected = "Hello Saw Product (1): 15-inch steel blade hand saw" +
                 " Available on: ";
 
