@@ -64,7 +64,8 @@ namespace Acme.Biz.Tests
             var expected = new OperationResult(true,
                             $"Order from Acme, Inc" +
                             $"\r\nProduct: Tools_1" +
-                            $"\r\nQuantity: 1");
+                            $"\r\nQuantity: 1" +
+                            $"\r\nDelivery instructions: Standard delivery");
 
             //Act
             var actual = vendor.PlaceOrder(product, 1);
@@ -84,7 +85,8 @@ namespace Acme.Biz.Tests
                             $"Order from Acme, Inc" +
                             $"\r\nProduct: Tools_1" +
                             $"\r\nQuantity: 1" +
-                            $"\r\nDeliver by: 10/25/2017");
+                            $"\r\nDeliver by: 10/25/2017" +
+                            $"\r\nDelivery instructions: Standard delivery");
 
             //Act
             var actual = vendor.PlaceOrder(product, 1,
@@ -106,9 +108,6 @@ namespace Acme.Biz.Tests
 
             //Act - mimiking null param inputs
             var actual = vendor.PlaceOrder(null, 12);
-
-            //Assert done using the above:
-            //[ExpectedException(typeof(ArgumentNullException))]
         }
 
         [TestMethod()]
@@ -127,6 +126,27 @@ namespace Acme.Biz.Tests
                                            SendCopy.no);
 
             //Assert - NOTE: We assert for every parameter
+            Assert.AreEqual(expected.Success, actual.Success);
+            Assert.AreEqual(expected.Message, actual.Message);
+        }
+
+        [TestMethod]
+        public void PlaceOrder_NoDeliveryDate()
+        {
+            //Arrange
+            var product = new Product("Test", 1, "Test description");
+            var vendor = new Vendor();
+            var expected = new OperationResult(true,
+                            $"Order from Acme, Inc" +
+                            $"\r\nProduct: Tools_1" +
+                            $"\r\nQuantity: 1" +
+                            $"\r\nDelivery instructions: Deliver to suite 42");
+
+            //Act - Using named parameters to avoid passing preceding parameters
+            var actual = vendor.PlaceOrder(product, 1, 
+                instructions: "Deliver to suite 42");
+
+            //Assert
             Assert.AreEqual(expected.Success, actual.Success);
             Assert.AreEqual(expected.Message, actual.Message);
         }

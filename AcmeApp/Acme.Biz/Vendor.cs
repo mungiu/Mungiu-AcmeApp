@@ -21,32 +21,7 @@ namespace Acme.Biz
 
         /// <summary>
         /// Sends product order to the vendor.
-        /// </summary>
-        /// <param name="product">Ordered product</param>
-        /// <param name="quantity">Ordered quantity</param>
-        /// <returns></returns>
-        public OperationResult PlaceOrder(Product product, int quantity)
-        {
-            //NOTE: If nulls are removed, will throw AtackOverflowException
-            return PlaceOrder(product, quantity, null, null);
-        }
-
-        /// <summary>
-        /// Sends product order to the vendor.
-        /// </summary>
-        /// <param name="product">Ordered product.</param>
-        /// <param name="quantity">Ordered quantity.</param>
-        /// <param name="deliverBy">Requested delivery date.</param>
-        /// <returns></returns>
-        public OperationResult PlaceOrder(Product product, int quantity, 
-                                          DateTimeOffset? deliverBy)
-        {
-            //NOTE: If nulls are removed, will throw AtackOverflowException
-            return PlaceOrder(product, quantity, deliverBy, null);
-        }
-
-        /// <summary>
-        /// Sends product order to the vendor.
+        /// NOTE: Using optional parameters reduces the amount o typed overloads
         /// </summary>
         /// <param name="product">Ordered product.</param>
         /// <param name="quantity">Ordered quantity.</param>
@@ -54,8 +29,8 @@ namespace Acme.Biz
         /// <param name="instructions">Delivery instructions.</param>
         /// <returns></returns>
         public OperationResult PlaceOrder(Product product, int quantity,
-                                          DateTimeOffset? deliverBy, 
-                                          string instructions)
+                                          DateTimeOffset? deliverBy = default, 
+                                          string instructions = "Standard delivery")
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));

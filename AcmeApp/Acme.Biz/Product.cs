@@ -65,9 +65,9 @@ namespace Acme.Biz
             }
             set
             {
-                if (value.Length > 4 && value.Length < 20)
+                if (value.Length > 2 && value.Length < 20)
                     productName = value;
-                else ValidationMessage = "Name must be > 4 & < 20";
+                else ValidationMessage = "Name must be > 2 & < 20";
             }
         }
 

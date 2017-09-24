@@ -125,12 +125,14 @@ namespace Acme.Biz.Tests
             //Arrange
             //when initializing using product properties instance will not be created
             //if one of the properties does not pass validation
-            var currentProduct = new Product();
-            currentProduct.ProductName = "Asdfajdh akshdkahsdkahg ahksgdjakdaksj";
+            var currentProduct = new Product
+            {
+                ProductName = "Asdfajdh akshdkahsdkahg ahksgdjakdaksj"
+            };
 
             //since "var" type can not be used for "null";
             string expectedProductName = null;
-            string expectedValidationMessage = "Name must be > 4 & < 20";
+            string expectedValidationMessage = "Name must be > 2 & < 20";
 
             //Assert 1
             Assert.AreEqual(expectedProductName, currentProduct?.ProductName);
@@ -142,10 +144,10 @@ namespace Acme.Biz.Tests
         {
             //Arrange
             var currentProduct = new Product();
-            currentProduct.ProductName = "Asdf";
+            currentProduct.ProductName = "As";
 
             string expectedProductName = null;
-            string expectedValidationMessage = "Name must be > 4 & < 20";
+            string expectedValidationMessage = "Name must be > 2 & < 20";
 
             //Assert 1
             Assert.AreEqual(expectedProductName, currentProduct?.ProductName);
