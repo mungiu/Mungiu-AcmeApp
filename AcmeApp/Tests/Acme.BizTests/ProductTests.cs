@@ -143,8 +143,10 @@ namespace Acme.Biz.Tests
         public void ProductName_TooShort()
         {
             //Arrange
-            var currentProduct = new Product();
-            currentProduct.ProductName = "As";
+            var currentProduct = new Product
+            {
+                ProductName = "As"
+            };
 
             string expectedProductName = null;
             string expectedValidationMessage = "Name must be > 2 & < 20";
@@ -218,10 +220,12 @@ namespace Acme.Biz.Tests
         public void ProductCode_Concatination()
         {
             //Arrange
-            var currentProduct = new Product();
-            currentProduct.Category = "This";
-            currentProduct.SequenceNumber = 1;
-            var expectedProductCode = "This_1";
+            var currentProduct = new Product
+            {
+                Category = "This",
+                SequenceNumber = 1
+            };
+            var expectedProductCode = "This_0001";
 
             //Assert
             Assert.AreEqual(expectedProductCode, currentProduct.ProductCode);

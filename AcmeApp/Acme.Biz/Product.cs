@@ -99,10 +99,10 @@ namespace Acme.Biz
             set { productVendor = value; }
         }
 
+        //auto implemented properties (backing fields implicitly exist)
         internal string Category { get; set; }
         public int SequenceNumber { get; set; } = 1;
-        public string ProductCode => this.Category + "_" + SequenceNumber;
-        //auto implemented property (backing field implicitly existent)
+        public string ProductCode => $"{this.Category}_{this.SequenceNumber:0000}";
         public string ValidationMessage { get; private set; }
         #endregion
 

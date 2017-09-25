@@ -40,21 +40,26 @@ namespace Acme.Biz
                 throw new ArgumentOutOfRangeException(nameof(deliverBy));
 
             var success = false;
-            var orderText = "Order from Acme, Inc" +
+            var orderText = new StringBuilder(
+                            "Order from Acme, Inc" +
                             $"\r\nProduct: {product.ProductCode}" +
-                            $"\r\nQuantity: {quantity}";
+                            $"\r\nQuantity: {quantity}");
             if (deliverBy.HasValue)
-                orderText += $"\r\nDeliver by: {deliverBy.Value.ToString("d")}";
-            if (instructions != null)
-                orderText += $"\r\nDelivery instructions: {instructions}";
+                orderText.Append($"\r\nDeliver by: " +
+                                 $"{deliverBy.Value.ToString("d")}");
+            if (!String.IsNullOrWhiteSpace(instructions))
+                orderText.Append($"\r\nDelivery instructions: " +
+                                 $"{instructions}");
 
             var emailService = new EmailService();
             var confirmation = emailService.SendMessage("Order Confirmation",
-                orderText, this.Email);
+                                                        orderText.ToString(), 
+                                                        this.Email);
             if (confirmation.StartsWith("Message sent: "))
                 success = true;
 
-            var operationResult = new OperationResult(success, orderText);
+            var operationResult = new OperationResult(success, 
+                                                      orderText.ToString());
             return operationResult;
         }
 
@@ -90,6 +95,28 @@ namespace Acme.Biz
                                                         message, 
                                                         this.Email);
             return confirmation;
+        }
+
+        //just for knowledge testing
+        public string PrepareDirections()
+        {
+            var directions = @"Insert \r\n to define a new line";
+            return directions;
+        }
+
+        //override - Nb: string behaves as a value type even if it's reference type
+        public override string ToString()
+        {
+            string vendorInfo = $"Vendor: {this.CompanyName}";
+            string result;
+            result = vendorInfo?.ToLower();
+            result = vendorInfo?.Replace("Vendor", "Supplier");
+
+            var length = vendorInfo?.Length;
+            var colonIndex = vendorInfo?.IndexOf(":");
+            var begins = vendorInfo?.StartsWith("Vendor");
+
+            return vendorInfo;
         }
     }
 }
