@@ -40,16 +40,14 @@ namespace Acme.Biz
                 throw new ArgumentOutOfRangeException(nameof(deliverBy));
 
             var success = false;
-            var orderText = new StringBuilder(
-                            "Order from Acme, Inc" +
-                            $"\r\nProduct: {product.ProductCode}" +
-                            $"\r\nQuantity: {quantity}");
+            var orderText = new StringBuilder("Order from Acme, Inc" +
+                                              $"\r\nProduct: {product.ProductCode}" +
+                                              $"\r\nQuantity: {quantity}");
+
             if (deliverBy.HasValue)
-                orderText.Append($"\r\nDeliver by: " +
-                                 $"{deliverBy.Value.ToString("d")}");
+                orderText.Append($"\r\nDeliver by: {deliverBy.Value.ToString("d")}");
             if (!String.IsNullOrWhiteSpace(instructions))
-                orderText.Append($"\r\nDelivery instructions: " +
-                                 $"{instructions}");
+                orderText.Append($"\r\nDelivery instructions: {instructions}");
 
             var emailService = new EmailService();
             var confirmation = emailService.SendMessage("Order Confirmation",
@@ -58,8 +56,7 @@ namespace Acme.Biz
             if (confirmation.StartsWith("Message sent: "))
                 success = true;
 
-            var operationResult = new OperationResult(success, 
-                                                      orderText.ToString());
+            var operationResult = new OperationResult(success, orderText.ToString());
             return operationResult;
         }
 
